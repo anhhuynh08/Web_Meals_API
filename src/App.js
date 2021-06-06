@@ -1,25 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import Form from './components/Form';
+import Meals from './components/Meals';
+import React, { Component } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// const API_KEY = "1";
+class App extends Component {
+  state = {
+    meals: []
+  };
+
+  getMeals = async (e) => {
+    const mealName = e.target.elements.mealName.value;
+    e.preventDefault();
+    // const api_call = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${mealName}`);
+    const api_call = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${mealName}`);
+    const data = await api_call.json();
+    this.setState({ meals: data.meals });
+    console.log(this.state.meals);
+  }
+  render() {
+    return (
+      <div className="App">
+        <div className="container">
+          <h2>Meals api</h2>
+          <Form getMeals={this.getMeals} />
+          <Meals meals={this.state.meals} />
+        </div>
+
+      </div>
+    );
+  }
 }
 
 export default App;
